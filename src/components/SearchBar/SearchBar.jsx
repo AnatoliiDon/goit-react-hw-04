@@ -36,7 +36,18 @@ const SearchBar = ({ onSubmit }) => {
         <button className={css.searchBtn} type="submit">
           Search
         </button>
-        <Toaster />
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              border: '1px solid #713200',
+              padding: '16px',
+              color: '#fafafa',
+              background: 'red',
+            },
+          }}
+        />
       </form>
     </header>
   );

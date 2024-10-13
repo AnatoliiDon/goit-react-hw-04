@@ -19,6 +19,9 @@ function App() {
   const [totalPages, setTotalPages] = useState(null);
   const accessKey = 'r21YpYkIhEbJxvNOZ4mo7wQhCUtlMTjvYkyu5-o3dhk';
   const onSubmit = searchedValue => {
+    if (searchedValue === query) {
+      return;
+    }
     setPhotosData([]);
     setPage(1);
     setQuery(searchedValue);
@@ -66,7 +69,7 @@ function App() {
 
   return (
     <div>
-      <SearchBar onSubmit={onSubmit} query={query} setQuery={setQuery} />
+      <SearchBar onSubmit={onSubmit} />
       <ImageGallery photosData={photosData} openModal={openModal} />
       <ImageModal
         onClose={onClose}

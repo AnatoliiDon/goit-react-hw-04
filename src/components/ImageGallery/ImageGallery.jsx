@@ -6,12 +6,8 @@ const ImageGallery = ({ photosData, openModal }) => {
     <ul className={styles.imageList}>
       {photosData.map(photoData => {
         return (
-          <li
-            key={photoData.id}
-            className={styles.imageListItem}
-            onClick={openModal}
-          >
-            <ImageCard photoData={photoData} />
+          <li key={photoData.id} className={styles.imageListItem}>
+            <ImageCard photoData={photoData} openModal={openModal} />
           </li>
         );
       })}

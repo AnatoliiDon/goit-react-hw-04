@@ -1,6 +1,6 @@
 import css from './ImageCard.module.css';
 
-const ImageCard = ({ photoData }) => {
+const ImageCard = ({ photoData, openModal }) => {
   return (
     <div className={css.photoContainer}>
       <img
@@ -10,6 +10,7 @@ const ImageCard = ({ photoData }) => {
         data-alt={photoData.description}
         width={400}
         height={275}
+        onClick={openModal}
       />
     </div>
   );

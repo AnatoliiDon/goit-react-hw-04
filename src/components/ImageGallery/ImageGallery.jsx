@@ -1,12 +1,16 @@
 import ImageCard from '../ImageCard/ImageCard';
 import styles from './imageGallery.module.css';
 
-const ImageGallery = ({ photosData }) => {
+const ImageGallery = ({ photosData, openModal }) => {
   return (
     <ul className={styles.imageList}>
       {photosData.map(photoData => {
         return (
-          <li key={photoData.id} className={styles.imageListItem}>
+          <li
+            key={photoData.id}
+            className={styles.imageListItem}
+            onClick={openModal}
+          >
             <ImageCard photoData={photoData} />
           </li>
         );

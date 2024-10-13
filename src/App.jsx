@@ -6,6 +6,7 @@ import './App.css';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import Loader from './components/Loader/Loader';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import ImageModal from './components/ImageModal/ImageModal';
 
 function App() {
   const [query, setQuery] = useState(null);
@@ -13,14 +14,15 @@ function App() {
   const [photosData, setPhotosData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [bigPhotoData, setBigPhotoData] = useState({});
+  const [totalPages, setTotalPages] = useState(null);
   const accessKey = 'r21YpYkIhEbJxvNOZ4mo7wQhCUtlMTjvYkyu5-o3dhk';
-  const onSubmit = event => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    setQuery(form.elements.query.value);
+  const onSubmit = searchedValue => {
+    setPhotosData([]);
+    setPage(1);
+    setQuery(searchedValue);
   };
-
-  //
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -30,10 +32,10 @@ function App() {
           return;
         }
         const { data } = await axios.get(
-          `https://api.unsplash.com/search/photos?page=${page}&client_id=${accessKey}&query=${query}&orientation=landscape`
+          `https://api.unsplash.com/search/photos?page=${page}&client_id=${accessKey}&query=${query}&orientation=landscape&per_page=9`
         );
         setPhotosData([...photosData, ...data.results]);
-        console.log(photosData);
+        setTotalPages(data.total_pages);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -48,17 +50,38 @@ function App() {
     setPage(page + 1);
   };
 
+  const openModal = event => {
+    setIsOpen(true);
+    const bigPhotoData = event.target.dataset;
+
+    setBigPhotoData({
+      data: bigPhotoData.img,
+      alt: bigPhotoData.alt,
+    });
+  };
+
+  const onClose = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div>
       <SearchBar onSubmit={onSubmit} query={query} setQuery={setQuery} />
-      <ImageGallery photosData={photosData} />
+      <ImageGallery photosData={photosData} openModal={openModal} />
+      <ImageModal
+        onClose={onClose}
+        isOpen={isOpen}
+        bigPhotoData={bigPhotoData}
+      />
       {isLoading && (
         <div>
           <Loader />
         </div>
       )}
       {error && <ErrorMessage />}
-      {photosData.length === 0 ? null : <LoadMoreBtn loadMore={loadMore} />}
+      {photosData.length === 0 || totalPages === page ? null : (
+        <LoadMoreBtn loadMore={loadMore} />
+      )}
     </div>
   );
 }
